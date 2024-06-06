@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Game.Scripts.Game.SeekingMissileService;
 using UnityEngine;
 using LightItUp.Game;
 using LightItUp.Singletons;
+using UnityEngine.Serialization;
 
 namespace LightItUp.Data
 {
@@ -33,6 +35,7 @@ namespace LightItUp.Data
             celebrationFXs = GetPool(celebrationFXPrefab, 2, transform);
             tutorialTexts = GetPool(tutorialTextPrefab, 4, transform);
             starPickupFXs = GetPool(starPickupFXPrefab, 3, transform);
+            seekingMissiles = GetPool(seekingMissilePrefab, 3, transform);
         }
         ObjectPool<T> GetPool<T>(T prefab, int startCount, Transform t) where T : PooledObject
         {
@@ -85,6 +88,20 @@ namespace LightItUp.Data
         public static void ReturnStarFX(ParticleFXBasic starFX)
         {
             Instance.starPickupFXs.ReturnObject(starFX);
+        }
+        
+        // Seeking missile prefab
+        public SeekingMissile seekingMissilePrefab;
+        public ObjectPool<SeekingMissile> seekingMissiles;
+
+        public static SeekingMissile GetSeekerMissile()
+        {
+            return Instance.seekingMissiles.GetObject();
+        }
+
+        public static void ReturnSeekerMissile(SeekingMissile seekingMissile)
+        {
+            Instance.seekingMissiles.ReturnObject(seekingMissile);
         }
     }
 

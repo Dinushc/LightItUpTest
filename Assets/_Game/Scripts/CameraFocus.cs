@@ -4,11 +4,13 @@ using UnityEngine;
 using LightItUp.Data;
 using LightItUp.Game;
 using System.Collections;
+using _Game.Scripts.Game.SeekingMissileService;
 
 namespace LightItUp
 {
     public class CameraFocus : MonoBehaviour
     {
+        List<SeekingMissile> _missiles;
         public class CamTarget
         {
             public BlockController target;
@@ -81,10 +83,13 @@ namespace LightItUp
             unlitBlocks = new List<BlockController>();
             litBlocks = new List<BlockController>();
             walls = new List<Wall>();
+            _missiles = new List<SeekingMissile>();
             if (!hasStartPos)
             {
                 if (Camera.main == null)
-                    return;
+                {
+                    return;   
+                }
             
                 camStartPosition = Camera.main.transform.position;
                 camStartOrthoSize = Camera.main.orthographicSize;
@@ -139,8 +144,10 @@ namespace LightItUp
         
             ProgressBlendTime();
             Rect r = fullZoom < 0.0001f ? GetBlendedRect() : LerpRect(GetBlendedRect(), GetFullLevelRect(), GameSettings.CameraFocus.blendCurve.Evaluate(fullZoom));
-            SetWantedValues(r);
+            
+            r = FollowTheMissiles(r);
             MoveTowardsWanted();
+            SetWantedValues(r);
 
 
 			SetCamera (currentPosition, currentOrthoSize);
@@ -375,6 +382,26 @@ namespace LightItUp
         }
 
         #endregion
+        
+        private Rect FollowTheMissiles(Rect rect)
+        {
+            foreach (var missile in _missiles)
+            {
+                Rect missileRect = new Rect(missile.transform.position, Vector2.one);
+                rect = IncludeRect(rect, ExpandRect(missileRect, 4));
+            }
+
+            return rect;
+        }
+
+        public void AddMissile(SeekingMissile missile)
+        {
+            _missiles.Add(missile);
+        }
+        public void RemoveMissile(SeekingMissile missile)
+        {
+            _missiles.Remove(missile);
+        }
     }
 }
 

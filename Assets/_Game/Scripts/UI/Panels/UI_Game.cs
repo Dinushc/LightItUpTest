@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using LightItUp.Data;
@@ -182,6 +181,17 @@ namespace LightItUp.UI
 		{
 			//feedbackPoints.text = "+" + p;
 			//feedbackPoints.GetComponent<Animator>().Play("ScorePoints");
+		}
+		
+		public Button missilesButton;
+		public void ShowMissileButton()
+		{
+			missilesButton.gameObject.SetActive(true);
+		}
+		
+		public void HideMissileButton()
+		{
+			missilesButton.gameObject.SetActive(false);
 		}
 
 		public void Update()

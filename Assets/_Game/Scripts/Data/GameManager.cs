@@ -1,4 +1,5 @@
 ﻿using System;
+using _Game.Scripts.Game.SeekingMissileService;
 using HyperCasual;
 using UnityEngine;
 using LightItUp.Game;
@@ -245,6 +246,9 @@ namespace LightItUp.Data
             {
                 UI_PopupRelayer.Instance.RemovePreviousHeldPopup();
             }
+            
+            // Init SeekingMissileService
+            SeekingMissileService.Instance.OnLoad(currentLevel);
             
             currentLevel.ConfirmGameLoadFinalized ();
         }

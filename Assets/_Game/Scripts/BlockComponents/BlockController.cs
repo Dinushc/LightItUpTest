@@ -1488,5 +1488,10 @@ namespace LightItUp.Game
             }
         }
         #endregion
+        
+        public bool IsRegularBlock()
+        {
+            return !useEffector && !useRotation && !useMove && !usePivotRotation && !useExplode;
+        }
     }
 }
