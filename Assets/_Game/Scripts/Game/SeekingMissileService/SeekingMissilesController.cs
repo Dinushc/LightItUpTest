@@ -3,18 +3,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using LightItUp.Data;
 using LightItUp.Game;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace _Game.Scripts.Game.SeekingMissileService
 {
     public class SeekingMissilesController
     {
-        private MissileServiceConfig _seekerMissileConfig;
+        private MissileServiceConfig _seekingMissileConfig;
         private GameLevel _gameLevel;
         private List<SeekingMissile> _missiles = new List<SeekingMissile>();
-        public void Init(GameManager gameManager, MissileServiceConfig seekerMissileConfig) {
+        private LayerMask _blockLayer;
+        private LayerMask _blockLayerLit;
+        public void Init(GameManager gameManager, MissileServiceConfig seekingMissileConfig) {
            _gameLevel = gameManager.currentLevel;
-              _seekerMissileConfig = seekerMissileConfig;
+           _seekingMissileConfig = seekingMissileConfig;
         }
         
         private List<BlockController> GetClosestUnlitBlocks()
@@ -53,24 +56,34 @@ namespace _Game.Scripts.Game.SeekingMissileService
 
             return regularBlocks;
         }
+
+        public void SetLayers(LayerMask blockLayer, LayerMask blockLayerLit)
+        {
+            _blockLayer = blockLayer;
+            _blockLayerLit = blockLayerLit;
+        }
         
         public async Task RocketLaunch()
         {
             var targetList = GetClosestUnlitBlocks();
             var spawnPosition = _gameLevel.player.transform.position;
-            spawnPosition.y += .75f;
+            spawnPosition.y += 0.8f;
     
-            for (var i = 0; i < _seekerMissileConfig.missilesCount; i++)
+            for (var i = 0; i < _seekingMissileConfig.missilesCount; i++)
             {
-                var delay = i == 0 ? 0 : _seekerMissileConfig.gapsBetweenShots * 1000;
+                var delay = i == 0 ? 0 : _seekingMissileConfig.gapsBetweenShots * 1000;
                 await Task.Delay(delay);
                 var missile = ObjectPool.GetSeekerMissile();
                 spawnPosition.x += Random.Range(-2f, 2f);
+                if (!IsPositionFree(spawnPosition))
+                {
+                    spawnPosition.x += Random.Range(-2f, 2f);
+                }
                 missile.transform.position = spawnPosition;
                 missile.Init(
                     this, 
                     targetList, 
-                    _seekerMissileConfig
+                    _seekingMissileConfig
                     );
                 
                 _missiles.Add(missile);
@@ -85,6 +98,12 @@ namespace _Game.Scripts.Game.SeekingMissileService
                 targetList.RemoveAt(0); 
                 targetList.Add(firstTarget);
             }
+        }
+        
+        private bool IsPositionFree(Vector3 position)
+        {
+            Collider[] colliders = Physics.OverlapSphere(position, 2, _blockLayer | _blockLayerLit);
+            return colliders.Length == 0;
         }
         
         public void OnExploded(SeekingMissile missile, bool returned)

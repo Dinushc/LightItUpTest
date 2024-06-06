@@ -42,6 +42,7 @@ namespace _Game.Scripts.Game.SeekingMissileService
             
             _movement.Setup(_blockLayer, _blockLayerLit, _targeting);
             _currentDirection = (_targeting.GetCurrentTarget().transform.position - transform.position).normalized;
+            _seekingMissilesController.SetLayers(_blockLayer, _blockLayerLit);
         }
 
         private void Update()
@@ -68,7 +69,7 @@ namespace _Game.Scripts.Game.SeekingMissileService
             {
                 return;
             }
-            _collisionHandler.OnCollide(other, this);
+            _collisionHandler.OnCollide(other, this, ref _currentDirection);
         }
 
         private void Clear()

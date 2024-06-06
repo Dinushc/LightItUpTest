@@ -18,14 +18,9 @@ namespace _Game.Scripts.Game.SeekingMissileService.MissileComponents
             _missileTargeting = missileTargeting;
         }
 
-        public void OnCollide(Collision2D other, SeekingMissile missile)
+        public void OnCollide(Collision2D other, SeekingMissile missile, ref Vector2 currentDirection)
         {
-            if (other == null)
-            {
-                return;
-            }
-
-            if (other.gameObject == null)
+            if (_missileTargeting.GetCurrentTarget() == null)
             {
                 return;
             }
@@ -41,6 +36,7 @@ namespace _Game.Scripts.Game.SeekingMissileService.MissileComponents
                 }
                 else
                 {
+                    currentDirection = -currentDirection;
                     Physics2D.IgnoreCollision(_collider2D, other.collider);
                 }
             }

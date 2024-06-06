@@ -47,7 +47,7 @@ namespace _Game.Scripts.Game.SeekingMissileService.MissileComponents
                 float angle = i * (360f / _rayCount);
                 Vector3 rayDirection = Quaternion.Euler(0, 0, angle) * directionToTarget;
 
-                RaycastHit2D hit = Physics2D.Raycast(currentPosition, rayDirection, 1, _blockLayerLit | _blockLayer);
+                RaycastHit2D hit = Physics2D.Raycast(currentPosition, rayDirection, 1.5f, _blockLayerLit | _blockLayer);
 
                 if (hit.collider != null)
                 {
@@ -55,7 +55,7 @@ namespace _Game.Scripts.Game.SeekingMissileService.MissileComponents
                     {
                         Vector3 hitNormal = hit.normal;
                         hitNormal.y = 0; // Flatten the force to the horizontal plane
-                        avoidForce += hitNormal * (10 / hit.distance);
+                        avoidForce += hitNormal * (30 / hit.distance);
                     }
                     else
                     {
