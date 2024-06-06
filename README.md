@@ -5,7 +5,7 @@ ___
 - About ->
    a feature made to increase the player's chances of passing the level. This is the ability to fire projectiles at blocks and illuminate them. RayCast with steering behavior is used to avoid obstacles.
 - The seeking missile feature settings `{Assets/_Game/Resources/SeekingMissileData.asset}`.
-   - **Missiles Count:** shows how many missiles will be fired each time the button is pressed.
+   - **Missiles Count:** shows how many missiles will be fired each time the button is pressed. If the value is 0, the button will not appear.
   - **Missile Speed:** shows the velocity of the projectiles and this is customizable.
   - **Uses Per Level:** shows how many times you can press the button and fire missiles in one level.
   - **Gaps Between Shots:** delay between shots. The default is 0, but you can set it so that the shells are fired one by one, for example after a second each.
