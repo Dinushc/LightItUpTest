@@ -20,6 +20,15 @@ namespace _Game.Scripts.Game.SeekingMissileService.MissileComponents
 
         public void OnCollide(Collision2D other, SeekingMissile missile)
         {
+            if (other == null)
+            {
+                return;
+            }
+
+            if (other.gameObject == null)
+            {
+                return;
+            }
             if (other.gameObject == _missileTargeting.GetCurrentTarget().gameObject)
             {
                 Collide(missile, _missileTargeting.GetCurrentTarget());
